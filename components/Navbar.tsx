@@ -61,7 +61,7 @@ function IconClose() {
 function IconHamburger() {
   return (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-      <path d="M3 5.5h16M3 11h16M3 16.5h16" stroke="#374151" strokeWidth="1.75" strokeLinecap="round"/>
+      <path d="M3 8h16M3 14h16" stroke="#374151" strokeWidth="1.75" strokeLinecap="round"/>
     </svg>
   );
 }
@@ -80,7 +80,7 @@ export default function Navbar() {
       {/* ── Top bar ─────────────────────────────────────────── */}
       <header
         role="banner"
-        className="w-full bg-white"
+        className="w-full bg-white sticky top-0 z-40"
         style={{ borderBottom: "1px solid #F0F1F5" }}
       >
         <nav
