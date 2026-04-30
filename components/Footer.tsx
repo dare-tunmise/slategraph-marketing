@@ -48,7 +48,7 @@ export default function Footer() {
                   <span className="text-xl font-bold tracking-tight text-[#1a1a1a]">Slategraph</span>
                 </Link>
                 <p className="text-[#666] text-[15px] leading-relaxed max-w-sm">
-                  Graphy empowers teams to transform raw data into clear, compelling visuals — making insights easier to share, understand, and act on.
+                  Generate keyword opportunities, topic clusters, and a ready-to-publish content calendar in minutes. No spreadsheets. No manual SEO research.
                 </p>
                 <div className="mt-8 flex gap-5">
                   {socials.map((s) => (
