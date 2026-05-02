@@ -1,3 +1,8 @@
+"use client";
+
+import Image from "next/image";
+import Reveal from "./Reveal";
+
 const BORDER = "1px solid rgba(255,255,255,0.1)";
 
 const features = [
@@ -13,7 +18,7 @@ const features = [
     id: "topic-graph",
     title: "Topic Graph Builder",
     description:
-      "Topic Graph Builder maps your niche into a structured knowledge graph — not a list of keywords. It connects topics, entities, and intent into a system you can actually build content from.",
+      "Topic Graph Builder maps your niche into a structured knowledge graph, not a list of keywords. It connects topics, entities, and intent into a system you can actually build content from.",
     imgSlot: "feature-topic-graph.png",
     textFirst: false,
   },
@@ -21,7 +26,7 @@ const features = [
     id: "content-gap",
     title: "Content Gap Detection",
     description:
-      "Content Gap Detection scans your domain against competitors and reveals high-impact opportunities you're currently missing. Not just keywords — topics, intent, and strategic blind spots.",
+      "Content Gap Detection scans your domain against competitors and reveals high-impact opportunities you're currently missing. Not just keywords. Topics, intent, and strategic blind spots.",
     imgSlot: "feature-content-gap.png",
     textFirst: true,
   },
@@ -29,7 +34,7 @@ const features = [
     id: "generate-briefs",
     title: "Generate briefs",
     description:
-      "Generate structured, strategy-backed briefs directly from your topic graph. No guesswork, no manual research — just clear direction your team (or AI) can execute immediately.",
+      "Generate structured, strategy-backed briefs directly from your topic graph. No guesswork, no manual research. Just clear direction your team (or AI) can execute immediately.",
     imgSlot: "feature-generate-briefs.png",
     textFirst: false,
   },
@@ -70,28 +75,14 @@ function FeatureImageCell({ imgSlot, label }: { imgSlot: string; label: string }
         }}
       />
 
-      {/*
-        SVG_SLOT: Replace the div below with:
-          <Image
-            src={`/images/${imgSlot}`}
-            alt={label}
-            fill
-            className="object-contain p-8 md:p-10"
-          />
-        Make sure to add `position: relative` to the parent if using fill.
-      */}
-      <div
-        className="svg-slot absolute"
-        style={{
-          inset: "10%",
-          borderRadius: 12,
-          zIndex: 10,
-        }}
-        role="img"
-        aria-label={`${label} interface preview`}
-      >
-        <span style={{ fontSize: 10 }}>{imgSlot}</span>
-      </div>
+      <Image
+        src={`/${imgSlot}`}
+        alt={`${label} interface preview`}
+        fill
+        sizes="(min-width: 768px) 50vw, 100vw"
+        className="object-contain p-8 md:p-12"
+        style={{ zIndex: 10 }}
+      />
     </div>
   );
 }
@@ -107,17 +98,19 @@ function FeatureTextCell({ title, id, description }: { title: string; id: string
     >
       <h3
         id={id}
-        className="text-white font-semibold leading-snug"
+        className="text-white"
         style={{
-          fontFamily: "var(--font-manrope), sans-serif",
-          fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
-          letterSpacing: "-0.02em",
+          fontFamily: "var(--font-roboto-serif), Georgia, serif",
+          fontWeight: 400,
+          fontSize: "clamp(1.375rem, 2.6vw, 30px)",
+          lineHeight: "1.0",
+          letterSpacing: 0,
         }}
       >
         {title}
       </h3>
       <p
-        className="mt-3 leading-relaxed"
+        className="mt-5 leading-relaxed"
         style={{
           fontFamily: "var(--font-manrope), sans-serif",
           fontSize: "clamp(13px, 1.05vw, 15px)",
@@ -180,7 +173,7 @@ export default function Features() {
             lineHeight: 1.65,
           }}
         >
-          From business analysis to publish-ready articles — Slategraph handles the entire workflow in minutes, not weeks.
+          From business analysis to publish-ready articles, Slategraph handles the entire workflow in minutes, not weeks.
         </p>
       </div>
 
@@ -193,8 +186,8 @@ export default function Features() {
           const isTextFirst = feature.textFirst;
 
           return (
+            <Reveal key={feature.id} delay={idx * 60} y={28}>
             <article
-              key={feature.id}
               aria-labelledby={`feat-${feature.id}`}
               className="grid grid-cols-1 md:grid-cols-2"
               style={{ borderTop: idx === 0 ? "none" : BORDER }}
@@ -222,6 +215,7 @@ export default function Features() {
                 <FeatureImageCell imgSlot={feature.imgSlot} label={feature.title} />
               </div>
             </article>
+            </Reveal>
           );
         })}
       </div>

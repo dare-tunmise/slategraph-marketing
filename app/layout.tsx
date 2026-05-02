@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Geist_Mono, Playfair_Display } from "next/font/google";
+import { Manrope, Geist_Mono, Playfair_Display, Inter, Lora, Roboto_Serif } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -19,6 +19,27 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   weight: ["700", "800", "900"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const lora = Lora({
+  variable: "--font-lora",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const robotoSerif = Roboto_Serif({
+  variable: "--font-roboto-serif",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
@@ -86,8 +107,32 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${geistMono.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} ${lora.variable} ${robotoSerif.variable}`}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "SlateGraph",
+              alternateName: ["Slategraph", "slategraph"],
+              url: siteUrl,
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "SlateGraph",
+              url: siteUrl,
+              logo: `${siteUrl}/icons/slategraph-logo.png`,
+            }),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

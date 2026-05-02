@@ -1,54 +1,46 @@
 const slategraphFeatures = [
   {
     title: "Built on a knowledge graph",
-    desc: "Maps 250-400 interconnected concepts — not just keywords.",
+    desc: "250-400+ interconnected concepts.",
   },
   {
-    title: "Strategy from your domain",
-    desc: "Enter a URL. Get a complete content system tailored to your business.",
+    title: "Strategy generated from your domain automatically",
+    desc: "",
   },
   {
-    title: "Computed structure",
-    desc: "Pillar pages, clusters, and relationships are calculated — not manually grouped.",
+    title: "Computed internal linking",
+    desc: "Calculated, not guessed.",
   },
   {
-    title: "Internal linking, solved",
-    desc: "Automatically determines what should link, where, and why.",
+    title: "End-to-end",
+    desc: "Strategy, briefs, articles, publishing order.",
   },
   {
-    title: "End-to-end workflow",
-    desc: "Strategy → briefs → drafts → linking — all in one system.",
-  },
-  {
-    title: "Publishing order included",
-    desc: "Knows what to publish first so every article compounds authority.",
+    title: "Every recommendation shows confidence and provenance",
+    desc: "",
   },
 ];
 
 const otherToolsFeatures = [
   {
-    title: "Keyword-first approach",
-    desc: "Lists and clusters keywords without understanding context.",
+    title: "Keyword lists without semantic understanding",
+    desc: "",
   },
   {
-    title: "Manual strategy setup",
-    desc: "You piece together topics, clusters, and structure yourself.",
+    title: "Manual strategy assembly across multiple tools",
+    desc: "",
   },
   {
-    title: "Loose organization",
-    desc: "No true relationship between topics — just grouped suggestions.",
-  },
-  {
-    title: "Guess-based linking",
-    desc: "Internal links are recommended, not calculated.",
+    title: "Internal links recommended, not computed",
+    desc: "",
   },
   {
     title: "Fragmented workflow",
-    desc: "Multiple tools for research, writing, and optimization.",
+    desc: "Research tool, writing tool, optimization tool.",
   },
   {
-    title: "No execution logic",
-    desc: "No clear direction on what to publish or in what order.",
+    title: "No explanation of why a topic was recommended",
+    desc: "",
   },
 ];
 
@@ -86,7 +78,7 @@ export default function Comparison() {
                   </div>
                   <div>
                     <h4 className="text-[16px] font-bold text-[#4361EE] mb-1">{item.title}</h4>
-                    <p className="text-[14px] text-[#6B7280] leading-relaxed">{item.desc}</p>
+                    {item.desc && <p className="text-[14px] text-[#6B7280] leading-relaxed">{item.desc}</p>}
                   </div>
                 </div>
               ))}

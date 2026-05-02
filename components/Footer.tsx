@@ -1,103 +1,239 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { useWaitlist } from "@/lib/useWaitlist";
 
-const footerLinks = {
-  Product: [
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Integrations", href: "/integrations" },
-    { label: "Changelog", href: "/changelog" },
+const navColumns: { label: string; href: string }[][] = [
+  [
+    { label: "FEATURES", href: "#features" },
+    { label: "PRICING", href: "/pricing" },
+    { label: "FAQ", href: "/faq" },
   ],
-  Resources: [
-    { label: "Documentation", href: "/docs" },
-    { label: "Tutorials", href: "/tutorials" },
-    { label: "Blog", href: "/blog" },
-    { label: "Support", href: "/support" },
+  [
+    { label: "TWITTER", href: "https://twitter.com/slategraph" },
+    { label: "LINKEDIN", href: "https://linkedin.com/company/slategraph" },
   ],
-  Company: [
-    { label: "About", href: "/about" },
-    { label: "Careers", href: "/careers" },
-    { label: "Contact", href: "/contact" },
-    { label: "Partners", href: "/partners" },
+  [
+    { label: "PRIVACY POLICY", href: "/privacy" },
+    { label: "TERMS OF SERVICE", href: "/terms" },
   ],
-};
-
-const socials = [
-  { label: "X", href: "#", path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" },
-  { label: "Instagram", href: "#", path: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" },
-  { label: "LinkedIn", href: "#", path: "M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" },
-  { label: "GitHub", href: "#", path: "M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-.99-.01-1.95-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.6.23 2.78.11 3.07.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.67.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" },
 ];
 
 export default function Footer() {
-  return (
-    <footer className="bg-[#F3F3F3] pt-24 pb-12 px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto">
-        {/* Main Floating Card */}
-        <div className="bg-white rounded-[40px] border border-black/5 p-10 md:p-16 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-            
-            {/* Left Column: Brand & Socials */}
-            <div className="lg:col-span-5 flex flex-col justify-between">
-              <div>
-                <Link href="/" className="flex items-center gap-2 mb-8">
-                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                      <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
-                    </svg>
-                  </div>
-                  <span className="text-xl font-bold tracking-tight text-[#1a1a1a]">Slategraph</span>
-                </Link>
-                <p className="text-[#666] text-[15px] leading-relaxed max-w-sm">
-                  Generate keyword opportunities, topic clusters, and a ready-to-publish content calendar in minutes. No spreadsheets. No manual SEO research.
-                </p>
-                <div className="mt-8 flex gap-5">
-                  {socials.map((s) => (
-                    <a key={s.label} href={s.href} className="text-black/70 hover:text-black transition-colors">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d={s.path} />
-                      </svg>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
+  const [email, setEmail] = useState("");
+  const { submit, status, error } = useWaitlist();
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submit(email);
+  };
+  const submitting = status === "submitting";
+  const success = status === "success";
+  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
 
-            {/* Right Columns: Links */}
-            <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
-              {Object.entries(footerLinks).map(([group, links]) => (
-                <div key={group}>
-                  <h3 className="text-black font-bold text-[15px] mb-6">{group}</h3>
-                  <ul className="space-y-4">
-                    {links.map((link) => (
-                      <li key={link.label}>
-                        <Link href={link.href} className="text-[#666] text-[15px] hover:text-black transition-colors">
+  return (
+    <footer
+      id="cta"
+      aria-labelledby="footer-cta-heading"
+      className="relative overflow-hidden scroll-mt-20"
+      style={{ background: "linear-gradient(180deg, #010B39 0%, #1A2F96 100%)" }}
+    >
+      {/* Spiral graphic — bleeds off right side, fades into bg at bottom */}
+      <img
+        src="/spiral-graphic.svg"
+        alt=""
+        aria-hidden
+        className="absolute pointer-events-none select-none"
+        style={{
+          top: "50px",
+          right: "-180px",
+          width: "959px",
+          height: "764px",
+          maxWidth: "70vw",
+          opacity: 0.95,
+          maskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 55%, transparent 95%)",
+        }}
+      />
+
+      {/* ── CTA block ───────────────────────────────────────── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 pt-24 md:pt-32 pb-20 md:pb-28">
+        <div className="max-w-2xl">
+          <h2
+            id="footer-cta-heading"
+            className="text-white"
+            style={{
+              fontFamily: "var(--font-lora), Georgia, serif",
+              fontWeight: 600,
+              fontSize: "clamp(32px, 6vw, 64px)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Ready to Build <br /> Authority?
+          </h2>
+
+          <p
+            className="mt-6"
+            style={{
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
+              fontSize: "clamp(15px, 1.4vw, 18px)",
+              color: "rgba(255,255,255,0.6)",
+            }}
+          >
+            From URL to complete content strategy in 7 minutes.
+          </p>
+
+          {/* Form: gray outer pill + lime inset button */}
+          <form
+            onSubmit={onSubmit}
+            className="mt-10 flex items-center p-1.5 rounded-full bg-[#F1F2F5]"
+            style={{ maxWidth: "520px" }}
+          >
+            <input
+              type="email"
+              placeholder="Enter email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting || success}
+              className="flex-1 bg-transparent border-none outline-none px-5 py-2 text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
+              style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
+            />
+            <button
+              type="submit"
+              disabled={submitting || success}
+              className="shrink-0 px-6 py-3 rounded-full font-semibold text-[15px] transition-all disabled:opacity-80 flex items-center gap-2"
+              style={{
+                background: "#B3FF42",
+                color: "#010B39",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
+              }}
+            >
+              {buttonLabel}
+              <span className="text-base leading-none">→</span>
+            </button>
+          </form>
+          {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
+        </div>
+      </div>
+
+      {/* ── Nav block ───────────────────────────────────────── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 pt-16 md:pt-20 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+          {/* Brand column */}
+          <div className="lg:col-span-6">
+            <Link href="/" className="inline-flex items-center gap-3 mb-8">
+              <span
+                className="flex items-center justify-center rounded-xl"
+                style={{ width: 44, height: 44, background: "#ffffff" }}
+              >
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+                  <rect
+                    x="6" y="6" width="10" height="10" rx="1"
+                    transform="rotate(45 11 11)"
+                    stroke="#4262FF" strokeWidth="1.7"
+                  />
+                </svg>
+              </span>
+              <span
+                className="text-white"
+                style={{
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
+                  fontSize: 22,
+                  fontWeight: 500,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Slategraph
+              </span>
+            </Link>
+
+            <h3
+              className="text-white max-w-xl"
+              style={{
+                fontFamily: "var(--font-roboto-serif), Georgia, serif",
+                fontWeight: 500,
+                fontSize: "clamp(22px, 2.4vw, 28px)",
+                lineHeight: 1.55,
+                letterSpacing: "-0.01em",
+                textTransform: "uppercase",
+              }}
+            >
+              AI-Powered Content Strategy Engine Product
+            </h3>
+          </div>
+
+          {/* Nav columns */}
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
+            {navColumns.map((col, i) => (
+              <ul key={i} className="flex flex-col gap-4">
+                {col.map((link) => {
+                  const external = link.href.startsWith("http");
+                  return (
+                    <li key={link.label}>
+                      {external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-white/85 hover:text-white transition-colors"
+                          style={{
+                            fontFamily: "var(--font-inter), system-ui, sans-serif",
+                            fontSize: 14,
+                            fontWeight: 500,
+                            letterSpacing: "0.04em",
+                          }}
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="text-white/85 hover:text-white transition-colors"
+                          style={{
+                            fontFamily: "var(--font-inter), system-ui, sans-serif",
+                            fontSize: 14,
+                            fontWeight: 500,
+                            letterSpacing: "0.04em",
+                          }}
+                        >
                           {link.label}
                         </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Divider & Legal */}
-          <div className="mt-20 pt-8 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-[#666] text-[14px]">
-              © {new Date().getFullYear()} Slategraph. All rights reserved.
-            </p>
-            <div className="flex gap-6 text-[14px] text-[#666]">
-              <Link href="/privacy" className="hover:text-black underline underline-offset-4 decoration-black/10">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-black underline underline-offset-4 decoration-black/10">Terms of Service</Link>
-              <Link href="/cookies" className="hover:text-black underline underline-offset-4 decoration-black/10">Cookies Settings</Link>
-            </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            ))}
           </div>
         </div>
 
-        {/* Big Watermark background */}
-        <div className="mt-12 flex justify-center opacity-[0.03] select-none pointer-events-none">
-           <h2 className="text-[18vw] font-bold leading-none tracking-tighter">SLATEGRAPH</h2>
+        {/* Copyright */}
+        <div className="mt-16 flex justify-end">
+          <p
+            className="text-white/85"
+            style={{
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+          >
+            © Slategraph.
+          </p>
         </div>
+      </div>
+
+      {/* ── Edge-to-edge watermark ──────────────────────────── */}
+      <div
+        aria-hidden
+        className="relative z-0 select-none pointer-events-none w-full"
+      >
+        <img
+          src="/footer-watermark.svg"
+          alt=""
+          className="block w-full h-auto"
+        />
       </div>
     </footer>
   );

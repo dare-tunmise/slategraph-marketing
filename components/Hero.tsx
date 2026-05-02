@@ -1,8 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
+import { useWaitlist } from "@/lib/useWaitlist";
 
 export default function Hero() {
+  const [email, setEmail] = useState("");
+  const { submit, status, error } = useWaitlist();
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submit(email);
+  };
+  const submitting = status === "submitting";
+  const success = status === "success";
+  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
+
   return (
     <section
       aria-labelledby="hero-heading"
@@ -23,29 +35,33 @@ export default function Hero() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 lg:px-10 py-20 md:py-32">
 
         {/* Badge */}
-        <div className="mb-8">
+        <div className="mb-8 fade-up" style={{ animationDelay: "0ms" }}>
           <span
             className="inline-block rounded-full px-4 py-1.5 text-xs md:text-sm font-medium"
             style={{
-              background: "rgba(66,98,255,0.08)",
-              border: "1px solid rgba(66,98,255,0.2)",
-              color: "#4262FF",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
+              background: "#8484841A",
+              color: "#686868",
             }}
           >
-            Built for SEO teams &amp; agencies
+            Built for growth and marketing teams
           </span>
         </div>
 
         {/* H1 */}
         <h1
           id="hero-heading"
-          className="font-black tracking-tight"
+          className="fade-up"
           style={{
-            fontFamily: "var(--font-playfair), Georgia, serif",
-            fontSize: "clamp(2.5rem, 8vw, 5.5rem)",
-            lineHeight: 1.05,
+            fontFamily: "var(--font-lora), Georgia, serif",
+            fontWeight: 600,
+            fontSize: "clamp(2.5rem, 7vw, 68px)",
+            lineHeight: "1.0912",
+            letterSpacing: "-0.02em",
+            textTransform: "capitalize",
             maxWidth: "850px",
             color: "#010B39",
+            animationDelay: "100ms",
           }}
         >
           Introducing Topics
@@ -55,8 +71,13 @@ export default function Hero() {
 
         {/* Subtext */}
         <p
-          className="mt-8 text-lg md:text-xl leading-relaxed"
-          style={{ color: "#5A6172", maxWidth: "600px" }}
+          className="mt-8 text-lg md:text-xl leading-relaxed fade-up"
+          style={{
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
+            color: "#5A6172",
+            maxWidth: "600px",
+            animationDelay: "220ms",
+          }}
         >
           Generate keyword opportunities, topic clusters, and a
           ready-to-publish content calendar in minutes. No spreadsheets.
@@ -64,57 +85,77 @@ export default function Hero() {
         </p>
 
         {/* ── CTA ───────────────────────────────────────────── */}
-        {/* Desktop: Combined pill input/button */}
-        <div className="hidden sm:block mt-12">
+        {/* Desktop: Blue pill with white inset button */}
+        <div className="hidden sm:block mt-12 fade-up" style={{ animationDelay: "340ms" }}>
           <form
-            className="flex items-center p-1.5 bg-white rounded-full shadow-[0_8px_32px_rgba(66,98,255,0.12)] border border-[#E4E9FA]"
-            style={{ maxWidth: "500px" }}
+            onSubmit={onSubmit}
+            className="flex items-center p-1.5 rounded-full shadow-[0_12px_40px_rgba(66,98,255,0.25)]"
+            style={{ background: "#4262FF", maxWidth: "560px" }}
           >
             <input
               type="email"
               placeholder="Enter email"
               required
-              className="flex-1 bg-transparent outline-none px-6 text-gray-900 placeholder:text-gray-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting || success}
+              className="flex-1 bg-transparent outline-none px-6 text-white placeholder:text-white/85 text-[16px] disabled:opacity-60"
+              style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
             />
             <button
               type="submit"
-              className="flex items-center gap-2 px-8 py-4 font-bold rounded-full transition-transform hover:scale-[1.02]"
+              disabled={submitting || success}
+              className="flex items-center gap-2 px-7 py-3.5 font-semibold rounded-full transition-transform hover:scale-[1.02] disabled:hover:scale-100 disabled:opacity-80"
               style={{
-                background: "#4262FF",
-                color: "#ffffff",
+                background: "#ffffff",
+                color: "#0A0A14",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
               }}
             >
-              Join the wait list
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              {buttonLabel}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </button>
           </form>
+          {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
         </div>
 
-        {/* Mobile: Stacked for better touch targets */}
-        <div className="sm:hidden mt-10 flex flex-col gap-4">
+        {/* Mobile: Stacked, same palette */}
+        <form onSubmit={onSubmit} className="sm:hidden mt-10 flex flex-col gap-3 fade-up" style={{ animationDelay: "340ms" }}>
           <input
             type="email"
             placeholder="Enter email"
-            className="w-full h-14 bg-white border border-[#E4E9FA] rounded-full px-6 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#4262FF]"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={submitting || success}
+            className="w-full h-14 rounded-full px-6 text-white placeholder:text-white/85 focus:outline-none disabled:opacity-60"
+            style={{
+              background: "#4262FF",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
+            }}
           />
           <button
             type="submit"
-            className="w-full h-14 flex items-center justify-center gap-2 font-bold rounded-full"
+            disabled={submitting || success}
+            className="w-full h-14 flex items-center justify-center gap-2 font-semibold rounded-full disabled:opacity-80"
             style={{
-              background: "#4262FF",
-              color: "#ffffff",
+              background: "#ffffff",
+              color: "#0A0A14",
+              border: "1px solid #E4E9FA",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
-            Join the wait list
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            {buttonLabel}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </button>
-        </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+        </form>
 
       </div>
     </section>

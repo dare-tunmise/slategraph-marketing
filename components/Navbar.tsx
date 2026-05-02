@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useWaitlist } from "@/lib/useWaitlist";
 
 /* ── Shared logo mark ─────────────────────────────────────────── */
 function LogoMark() {
@@ -74,6 +75,15 @@ const DASHED_BORDER = "1px dashed #D1D5DB";
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [productOpen, setProductOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const { submit, status, error } = useWaitlist();
+  const onWaitlistSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submit(email);
+  };
+  const submitting = status === "submitting";
+  const success = status === "success";
+  const waitlistLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
 
   return (
     <>
@@ -90,33 +100,20 @@ export default function Navbar() {
         >
           <LogoMark />
 
-          {/* Desktop pills */}
-          <ul className="hidden md:flex items-center gap-1.5" role="list">
-            {[
-              { label: "Product",   href: "#features",   chevron: true  },
-              { label: "Resources", href: "/resources",  chevron: true  },
-              { label: "Pricing",   href: "#pricing",    chevron: false },
-              { label: "Login",     href: "/login",      chevron: false },
-            ].map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors"
-                  style={{ color: "#374151", border: "1px solid #E4E6EF" }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#F5F6FA")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
-                >
-                  {link.label}
-                  {link.chevron && <span style={{ color: "#9CA3AF" }}><ChevronDown size={14} /></span>}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Desktop CTA */}
-          <div className="hidden md:block">
+          {/* Desktop right-side group: Product pill + Get started */}
+          <div className="hidden md:flex items-center gap-2">
             <Link
-              href="/signup"
+              href="#features"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors"
+              style={{ color: "#374151", border: "1px solid #E4E6EF" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#F5F6FA")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+            >
+              Product
+              <span style={{ color: "#9CA3AF" }}><ChevronDown size={14} /></span>
+            </Link>
+            <a
+              href="#cta"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white"
               style={{ background: "#4361EE" }}
             >
@@ -124,13 +121,13 @@ export default function Navbar() {
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                 <path d="M3 7h8M8 4l3 3-3 3" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </Link>
+            </a>
           </div>
 
           {/* Mobile: "Get started" pill + hamburger */}
           <div className="flex md:hidden items-center gap-2.5">
-            <Link
-              href="/signup"
+            <a
+              href="#cta"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold text-white"
               style={{ background: "#4361EE" }}
             >
@@ -138,7 +135,7 @@ export default function Navbar() {
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden>
                 <path d="M3 7h8M8 4l3 3-3 3" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </Link>
+            </a>
             <button
               onClick={() => { setMobileOpen(true); setProductOpen(false); }}
               className="flex items-center justify-center"
@@ -151,13 +148,19 @@ export default function Navbar() {
       </header>
 
       {/* ── Mobile full-screen overlay ───────────────────────── */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-50 flex flex-col bg-white"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation menu"
-        >
+      <div
+        className="fixed inset-0 z-50 flex flex-col bg-white md:hidden"
+        role="dialog"
+        aria-modal={mobileOpen}
+        aria-hidden={!mobileOpen}
+        aria-label="Navigation menu"
+        style={{
+          transform: mobileOpen ? "translateY(0)" : "translateY(-12px)",
+          opacity: mobileOpen ? 1 : 0,
+          pointerEvents: mobileOpen ? "auto" : "none",
+          transition: "transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease-out",
+        }}
+      >
           {/* Overlay header: logo + X */}
           <div
             className="flex items-center justify-between px-5 shrink-0"
@@ -191,8 +194,15 @@ export default function Navbar() {
                 </button>
 
                 {/* Product dropdown */}
-                {productOpen && (
-                  <div style={{ borderBottom: DASHED_BORDER }}>
+                <div
+                  aria-hidden={!productOpen}
+                  style={{
+                    borderBottom: productOpen ? DASHED_BORDER : "none",
+                    maxHeight: productOpen ? 320 : 0,
+                    overflow: "hidden",
+                    transition: "max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease",
+                  }}
+                >
                     {/* TDE sub-item */}
                     <Link
                       href="/product/tde"
@@ -204,12 +214,7 @@ export default function Navbar() {
                         className="shrink-0 flex items-center justify-center rounded-lg mt-0.5"
                         style={{ width: 32, height: 32, background: "#EEF1FF" }}
                       >
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                          <circle cx="4" cy="8" r="1.5" fill="#4361EE"/>
-                          <circle cx="12" cy="4" r="1.5" fill="#4361EE"/>
-                          <circle cx="12" cy="12" r="1.5" fill="#4361EE"/>
-                          <path d="M5.5 8h3.5M10.5 4.8l-4 2.4M10.5 11.2l-4-2.4" stroke="#4361EE" strokeWidth="1.2" strokeLinecap="round"/>
-                        </svg>
+                        <img src="/icons/share.svg" alt="" width={16} height={16} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium" style={{ color: "#0D0F1C", fontSize: 15, lineHeight: "22px" }}>
@@ -227,72 +232,36 @@ export default function Navbar() {
 
                     {/* More coming soon row */}
                     <div
-                      className="flex items-center justify-between py-4"
-                      style={{ borderTop: "1px solid #F3F4F6" }}
+                      className="-mx-5 px-5 flex items-center justify-between py-3"
+                      style={{ background: "#F5F6F8" }}
                     >
                       <span style={{ color: "#9CA3AF", fontSize: 14 }}>
                         More product coming soon…
                       </span>
-                      {/* SVG_SLOT: 3-D illustration — replace div below with your <Image> */}
-                      <div
-                        className="shrink-0 svg-slot-light rounded-full"
-                        style={{ width: 44, height: 44 }}
-                        aria-label="Coming soon illustration"
-                      >
-                        <span style={{ fontSize: 8 }}>SVG</span>
-                      </div>
+                      <img
+                        src="/icons/more.svg"
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="shrink-0 object-contain"
+                      />
                     </div>
                   </div>
-                )}
               </li>
 
-              {/* ── Resources ── */}
-              <li>
-                <Link
-                  href="/resources"
-                  className="flex items-center justify-between py-4"
-                  style={{ borderBottom: DASHED_BORDER, fontSize: 16, color: "#0D0F1C" }}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Resources
-                  <ChevronRight />
-                </Link>
-              </li>
-
-              {/* ── Pricing ── */}
-              <li>
-                <Link
-                  href="#pricing"
-                  className="flex items-center justify-between py-4"
-                  style={{ borderBottom: DASHED_BORDER, fontSize: 16, color: "#0D0F1C" }}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Pricing
-                  <ChevronRight />
-                </Link>
-              </li>
-
-              {/* ── Login ── */}
-              <li>
-                <Link
-                  href="/login"
-                  className="flex items-center justify-between py-4"
-                  style={{ borderBottom: DASHED_BORDER, fontSize: 16, color: "#0D0F1C" }}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Login
-                  <ChevronRight />
-                </Link>
-              </li>
             </ul>
 
             {/* ── Bottom CTA ── */}
-            <div className="px-5 pt-6 pb-10 flex flex-col gap-3">
+            <form onSubmit={onWaitlistSubmit} className="px-5 pt-6 pb-10 flex flex-col gap-3">
               <input
                 type="email"
                 placeholder="Enter email"
                 aria-label="Your email address"
-                className="w-full h-12 px-5 outline-none text-center text-sm"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={submitting || success}
+                className="w-full h-12 px-5 outline-none text-center text-sm disabled:opacity-60"
                 style={{
                   background: "#F3F4F6",
                   borderRadius: 999,
@@ -302,19 +271,20 @@ export default function Navbar() {
                 }}
               />
               <button
-                type="button"
-                className="w-full h-12 flex items-center justify-center gap-2 font-semibold text-base"
+                type="submit"
+                disabled={submitting || success}
+                className="w-full h-12 flex items-center justify-center gap-2 font-semibold text-base disabled:opacity-80"
                 style={{ background: "#89E400", color: "#0a1a00", borderRadius: 999 }}
               >
-                Join the wait list
+                {waitlistLabel}
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
-            </div>
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+            </form>
           </div>
         </div>
-      )}
     </>
   );
 }

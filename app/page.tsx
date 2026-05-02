@@ -7,7 +7,6 @@ import HowItWorks from "@/components/HowItWorks";
 import Showcase from "@/components/Showcase";
 import Comparison from "@/components/Comparison";
 import MoreFeatures from "@/components/MoreFeatures";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -24,7 +23,6 @@ export default function Home() {
         <Showcase />
         <Comparison />
         <MoreFeatures />
-        <CTA />
       </main>
 
       <Footer />
