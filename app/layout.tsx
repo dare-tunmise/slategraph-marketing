@@ -54,11 +54,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "SlateGraph — Topics Discovery Engine for Content Strategy",
-    template: "%s | SlateGraph",
+    default: "Slategraph: Topics Discovery Engine for Content Strategy",
+    template: "%s | Slategraph",
   },
   description:
-    "Turn one URL into a full content strategy with SlateGraph's AI-powered Topics Discovery Engine. Map your industry as an interconnected topic graph, detect content gaps, and generate ready-to-publish SEO content.",
+    "Turn one URL into a full content strategy with Slategraph's AI-powered Topics Discovery Engine. Map your industry as an interconnected topic graph, detect content gaps, and generate ready-to-publish SEO content.",
   keywords: [
     "SEO content strategy",
     "topic discovery engine",
@@ -71,9 +71,9 @@ export const metadata: Metadata = {
     "keyword research alternative",
     "semantic SEO",
   ],
-  authors: [{ name: "SlateGraph" }],
-  creator: "SlateGraph",
-  publisher: "SlateGraph",
+  authors: [{ name: "Slategraph" }],
+  creator: "Slategraph",
+  publisher: "Slategraph",
   robots: {
     index: true,
     follow: true,
@@ -83,15 +83,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "SlateGraph",
-    title: "SlateGraph — Topics Discovery Engine for Content Strategy",
+    siteName: "Slategraph",
+    title: "Slategraph: Topics Discovery Engine for Content Strategy",
     description:
       "Map your industry as a network of interconnected concepts. Turn one URL into a full content strategy with AI-powered topic discovery.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "SlateGraph Topics Discovery Engine" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Slategraph Topics Discovery Engine" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SlateGraph — Topics Discovery Engine",
+    title: "Slategraph: Topics Discovery Engine",
     description:
       "Turn one URL into a full content strategy. Map industry topics as an interconnected graph and generate SEO content at scale.",
     images: ["/og-image.png"],
@@ -115,8 +115,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              name: "SlateGraph",
-              alternateName: ["Slategraph", "slategraph"],
+              name: "Slategraph",
+              alternateName: ["SlateGraph", "slategraph"],
               url: siteUrl,
             }),
           }}
@@ -127,7 +127,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "SlateGraph",
+              name: "Slategraph",
               url: siteUrl,
               logo: `${siteUrl}/icons/slategraph-logo.png`,
             }),
@@ -139,7 +139,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "SlateGraph",
+              name: "Slategraph",
               applicationCategory: "BusinessApplication",
               description:
                 "AI-powered Topics Discovery Engine that maps your industry as a network of interconnected concepts to generate a full content strategy from one URL.",

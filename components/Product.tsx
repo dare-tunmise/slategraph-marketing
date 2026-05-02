@@ -46,7 +46,7 @@ export default function ProductShowcase() {
                 src={tab.image}
                 alt={`${tab.label} Interface`}
                 className={`
-                  absolute inset-0 w-full h-full object-cover transition-opacity duration-500
+                  absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500
                   ${activeTab === tab.id ? 'opacity-100 z-10' : 'opacity-0 z-0'}
                 `}
               />

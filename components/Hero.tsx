@@ -13,7 +13,7 @@ export default function Hero() {
   };
   const submitting = status === "submitting";
   const success = status === "success";
-  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
+  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the waitlist";
 
   return (
     <section

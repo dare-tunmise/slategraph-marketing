@@ -83,7 +83,7 @@ export default function Navbar() {
   };
   const submitting = status === "submitting";
   const success = status === "success";
-  const waitlistLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
+  const waitlistLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the waitlist";
 
   return (
     <>

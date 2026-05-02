@@ -45,7 +45,7 @@ export default function HowItWorks() {
   };
   const submitting = status === "submitting";
   const success = status === "success";
-  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list →";
+  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the waitlist →";
 
   return (
     <section id="how-it-works" className="bg-white py-20 lg:py-32">

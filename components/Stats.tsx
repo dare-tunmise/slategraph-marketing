@@ -9,33 +9,35 @@ function parseStat(str: string) {
   return { num: parseFloat(m[1]), suffix: m[2], decimals };
 }
 
-/** Animated count-up number */
+/** Animated count-up number (or static string when raw isn't a parseable number) */
 function AnimatedNumber({ raw, active }: { raw: string; active: boolean }) {
-  const { num, suffix, decimals } = parseStat(raw);
+  const parsed = parseStat(raw);
+  const isNumeric = parsed.suffix !== raw || parsed.num !== 0;
   const [val, setVal] = useState(0);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || !isNumeric) return;
     const duration = 1800;
     const start = performance.now();
     let raf: number;
     const tick = (now: number) => {
       const t = Math.min((now - start) / duration, 1);
       const ease = 1 - Math.pow(1 - t, 3);
-      setVal(parseFloat((num * ease).toFixed(decimals)));
+      setVal(parseFloat((parsed.num * ease).toFixed(parsed.decimals)));
       if (t < 1) raf = requestAnimationFrame(tick);
-      else setVal(num);
+      else setVal(parsed.num);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [active, num, decimals]);
+  }, [active, isNumeric, parsed.num, parsed.decimals]);
 
-  const display = decimals > 0 ? val.toFixed(decimals) : Math.round(val);
-  return <>{display}{suffix}</>;
+  if (!isNumeric) return <>{raw}</>;
+  const display = parsed.decimals > 0 ? val.toFixed(parsed.decimals) : Math.round(val);
+  return <>{display}{parsed.suffix}</>;
 }
 
 const stats = [
-  { value: "7",     label: "Minutes to strategy" },
+  { value: "10–12", label: "Minutes to strategy" },
   { value: "250+",  label: "Topics per run"      },
   { value: "99.9%", label: "Uptime Target"       },
   { value: "0",     label: "Manual Input"        },

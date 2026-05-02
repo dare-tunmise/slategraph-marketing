@@ -7,7 +7,6 @@ import { useWaitlist } from "@/lib/useWaitlist";
 const navColumns: { label: string; href: string }[][] = [
   [
     { label: "FEATURES", href: "#features" },
-    { label: "PRICING", href: "/pricing" },
     { label: "FAQ", href: "/faq" },
   ],
   [
@@ -29,7 +28,7 @@ export default function Footer() {
   };
   const submitting = status === "submitting";
   const success = status === "success";
-  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the wait list";
+  const buttonLabel = success ? "You're in!" : submitting ? "Joining…" : "Join the waitlist";
 
   return (
     <footer
@@ -81,7 +80,7 @@ export default function Footer() {
               color: "rgba(255,255,255,0.6)",
             }}
           >
-            From URL to complete content strategy in 7 minutes.
+            From URL to complete content strategy in 10–12 minutes.
           </p>
 
           {/* Desktop: nested gray pill + lime inset button */}
