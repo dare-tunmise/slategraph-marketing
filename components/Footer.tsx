@@ -84,10 +84,10 @@ export default function Footer() {
             From URL to complete content strategy in 7 minutes.
           </p>
 
-          {/* Form: gray outer pill + lime inset button */}
+          {/* Desktop: nested gray pill + lime inset button */}
           <form
             onSubmit={onSubmit}
-            className="mt-10 flex items-center p-1.5 rounded-full bg-[#F1F2F5]"
+            className="mt-10 hidden sm:flex items-center p-1.5 rounded-full bg-[#F1F2F5]"
             style={{ maxWidth: "520px" }}
           >
             <input
@@ -97,13 +97,44 @@ export default function Footer() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={submitting || success}
-              className="flex-1 bg-transparent border-none outline-none px-5 py-2 text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
+              className="flex-1 min-w-0 bg-transparent border-none outline-none px-5 py-2 text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
               style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
             />
             <button
               type="submit"
               disabled={submitting || success}
               className="shrink-0 px-6 py-3 rounded-full font-semibold text-[15px] transition-all disabled:opacity-80 flex items-center gap-2"
+              style={{
+                background: "#B3FF42",
+                color: "#010B39",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
+              }}
+            >
+              {buttonLabel}
+              <span className="text-base leading-none">→</span>
+            </button>
+          </form>
+
+          {/* Mobile: stacked pills */}
+          <form
+            onSubmit={onSubmit}
+            className="mt-10 sm:hidden flex flex-col gap-3 w-full"
+            style={{ maxWidth: "420px" }}
+          >
+            <input
+              type="email"
+              placeholder="Enter email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting || success}
+              className="w-full h-12 px-5 rounded-full bg-[#F1F2F5] border-none outline-none focus:ring-2 focus:ring-[#B3FF42] text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
+              style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
+            />
+            <button
+              type="submit"
+              disabled={submitting || success}
+              className="w-full h-12 rounded-full font-semibold text-[15px] transition-all disabled:opacity-80 flex items-center justify-center gap-2"
               style={{
                 background: "#B3FF42",
                 color: "#010B39",

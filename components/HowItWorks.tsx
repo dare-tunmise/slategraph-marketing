@@ -115,9 +115,10 @@ export default function HowItWorks() {
             High confidence? Approve. Low? Review. Full transparency, no black boxes.
           </p>
           
+          {/* Desktop: nested gray pill */}
           <form
             onSubmit={onSubmit}
-            className="mx-auto flex items-center p-1.5 rounded-full bg-[#F1F2F5]"
+            className="mx-auto hidden sm:flex items-center p-1.5 rounded-full bg-[#F1F2F5]"
             style={{ maxWidth: "480px" }}
           >
             <input
@@ -127,12 +128,36 @@ export default function HowItWorks() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={submitting || success}
-              className="flex-1 bg-transparent border-none outline-none px-5 text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
+              className="flex-1 min-w-0 bg-transparent border-none outline-none px-5 text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
             />
             <button
               type="submit"
               disabled={submitting || success}
               className="shrink-0 bg-[#4262FF] hover:bg-[#3651D1] text-white px-6 py-3 rounded-full font-semibold text-[15px] transition-all disabled:opacity-80 disabled:hover:bg-[#4262FF]"
+            >
+              {buttonLabel}
+            </button>
+          </form>
+
+          {/* Mobile: stacked pills */}
+          <form
+            onSubmit={onSubmit}
+            className="sm:hidden mx-auto flex flex-col gap-3 w-full"
+            style={{ maxWidth: "420px" }}
+          >
+            <input
+              type="email"
+              placeholder="Enter email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={submitting || success}
+              className="w-full h-12 px-5 rounded-full bg-[#F1F2F5] border-none outline-none focus:ring-2 focus:ring-[#4262FF] text-[15px] text-[#0A0A14] placeholder:text-[#9CA3AF] disabled:opacity-60"
+            />
+            <button
+              type="submit"
+              disabled={submitting || success}
+              className="w-full h-12 bg-[#4262FF] hover:bg-[#3651D1] text-white rounded-full font-semibold text-[15px] transition-all disabled:opacity-80 disabled:hover:bg-[#4262FF]"
             >
               {buttonLabel}
             </button>
