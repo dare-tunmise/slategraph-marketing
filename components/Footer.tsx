@@ -15,7 +15,7 @@ const navColumns: { label: string; href: string }[][] = [
   ],
   [
     { label: "PRIVACY POLICY", href: "/privacy" },
-    { label: "TERMS OF SERVICE", href: "/terms" },
+    { label: "TERMS OF USE", href: "/terms" },
   ],
 ];
 
